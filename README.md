@@ -5,6 +5,12 @@ FileUp is an Android WebView Image Upload Application, to give idea to new progr
 Project contains and complete Android Application that you can download and use directly.
 To edit project codes, better use Latest Android Studio.
 
+##Contribute
+Contributions are always welcome!
+
+##License
+This project is licensed under the terms of the [MIT license](https://opensource.org/licenses/MIT).
+
 ##More about Project OS
 Project OS (OpenSource) is not a big deal to understand. I always wanted to share what I learned through my experiences so please be free to ask questions and help.
 Mail me: mgks@infeeds.com
