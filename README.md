@@ -18,3 +18,5 @@ Support: https://infeeds.com/@mgks
 
 ##Happy Coding
 If not always. Sometimes try to share code snippets you know better. Because sharing is caring :)
+
+NOTE: Android 4.4 doesn't support webview upload default method and it's a permanent bug as no more KitKat updates are going to be made.
