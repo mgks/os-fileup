@@ -33,17 +33,14 @@ Public Profiles:
 
 ## More About Project Os
 Project Os (OpenSource) is an independent project started in year 2015. I always wanted to share what I learned through my experiences so please be free to ask questions and help.
-Mail me: mgks@infeeds.com
-Support: https://infeeds.com/@mgks
-
 
 ## License
 This project is licensed under the MIT License - see [LICENSE.md](LICENSE.md) file for details or read [MIT license](https://opensource.org/licenses/MIT).
 
 
 ## Acknowledgment
-Post any issue if you got any problem handling the project and if you want to contribute, you're most welcome to help me make a smarter project than what it is.
-Also, you can help me at [Infeeds](https://infeeds.com) Project, I always need a helping hand for that.
+Post any issue if you got any problem handling the project and if you want to contribute, you're most welcome to help me make a smarter project than what it is.  
+Also, you can help me at [Infeeds](https://infeeds.com) Project, I always need a helping hand for that.  
 Just drop me a mail at: [getmgks@gmail.com](mailto:getmgks@gmail.com)
 
 
