@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity{
                     if(null == mUMA){
                         return;
                     }
-                    if(intent.getData() == null){
+                    if(intent == null || intent.getData() == null){
                         //Capture Photo if no image available
                         if(mCM != null){
                             results = new Uri[]{Uri.parse(mCM)};
