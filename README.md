@@ -30,6 +30,8 @@ Public Profiles:
 * [Facebook](https://www.facebook.com/imgks)
 * [Twitter](https://twitter.com/getmgks)
 
+### Would you like to buy me a cup of coffee?
+#### I'd appreciate even your little contribution to my work, it helps me keep this Open Source updated. Send your Donations at Paypal - getmgks@gmail.com
 
 ## More About Project Os
 Project Os (OpenSource) is an independent project started in year 2015. I always wanted to share what I learned through my experiences so please be free to ask questions and help.
