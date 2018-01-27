@@ -26,8 +26,6 @@ This project is initially developed by **Ghazi Khan**.
 
 Public Profiles:
 * [Infeeds](https://infeeds.com/u/mgks)
-* [GitHub](https://github.com/mgks)
-* [Facebook](https://www.facebook.com/imgks)
 * [Twitter](https://twitter.com/getmgks)
 
 ### Would you like to buy me a cup of coffee?
