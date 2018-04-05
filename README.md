@@ -31,6 +31,11 @@ Public Profiles:
 ### Would you like to buy me a cup of coffee?
 #### I'd appreciate even your little contribution to my work, it helps me keep this Open Source updated. Send your Donations at Paypal - getmgks@gmail.com
 
+<a href='https://ko-fi.com/Z8Z4BPQ6' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+
+<a href="https://www.patreon.com/bePatron?c=1575504" target="_blank" title="Become a Patron"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png"></a>
+
+
 ## More About Project Os
 Project Os (OpenSource) is an independent project started in year 2015. I always wanted to share what I learned through my experiences so please be free to ask questions and help.
 
@@ -47,3 +52,5 @@ Just drop me a mail at: [getmgks@gmail.com](mailto:getmgks@gmail.com)
 `PROJECT NOTE: *Android 4.4 doesn't support webview upload default method and it's a permanent bug as no more KitKat updates are going to be made.*`
 
 **A personal note:** `You all must keep up with programming. It's sometimes difficult and sometimes easy but fun afterall, you can create your own world with programming, that's the beauty of it. So, all the best for your next creation.`
+
+[![Profile](https://forthebadge.com/images/badges/built-with-love.svg)](https://github.com/mgks)
