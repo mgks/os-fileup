@@ -20,21 +20,17 @@ You can remove any of the following requests if you do not need them or you can 
 ```
 `INTERNET` permission is required if you are requesting a weburl or webpage and `WRITE_EXTERNAL_STORAGE`+`CAMERA` permissions are required for camera photo capture and creation.
 
+## Want me to make a Custom App or Website for your business?
+### Contact Me at - getmgks@gmail.com
 
-## Author
-This project is initially developed by **Ghazi Khan**.
-
-Public Profiles:
-* [Infeeds](https://infeeds.com/u/mgks)
-* [Twitter](https://twitter.com/getmgks)
+This project is initially developed by **[Ghazi Khan](https://mgks.infeeds.com)**.
 
 ### Would you like to buy me a cup of coffee?
-#### I'd appreciate even your little contribution to my work, it helps me keep this Open Source updated. Send your Donations at Paypal - getmgks@gmail.com
+#### I'd appreciate even your little contribution to my work, it helps me keep this Open Source updated. If this project helped you or your business and you feel like donating some change, you can Paypal me - getmgks@gmail.com or tap any button below.
 
-<a href='https://ko-fi.com/Z8Z4BPQ6' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+<a href="https://ko-fi.com/Z8Z4BPQ6" target="_blank" title="Buy me a Coffee"><img height="36" style="border:0px;height:36px;" src="https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0" border="0" alt="Buy Me a Coffee at ko-fi.com" /></a>
 
 <a href="https://www.patreon.com/bePatron?c=1575504" target="_blank" title="Become a Patron"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png"></a>
-
 
 ## More About Project Os
 Project Os (OpenSource) is an independent project started in year 2015. I always wanted to share what I learned through my experiences so please be free to ask questions and help.
