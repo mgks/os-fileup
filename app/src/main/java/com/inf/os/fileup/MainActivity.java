@@ -1,5 +1,13 @@
 package com.inf.os.fileup;
 
+/*
+ * Os-FileUp is an Android Open Source Project hosted on GitHub.
+ * Developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
+ * This program is free to use for private and commercial purposes.
+ * It will be generous to mention project source or developer in your Application's License(s) Wiki.
+ * Giving right credit to developers encourages them to create better projects :)
+ */
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -33,7 +41,7 @@ public class MainActivity extends AppCompatActivity{
     WebView webView;
     private static final String TAG = MainActivity.class.getSimpleName();
     private String mCM;
-    private ValueCallback<Uri> mUM;
+    private ValueCallback mUM;
     private ValueCallback<Uri[]> mUMA;
     private final static int FCR=1;
 
@@ -94,11 +102,11 @@ public class MainActivity extends AppCompatActivity{
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }else if(Build.VERSION.SDK_INT >= 19){
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        }else if(Build.VERSION.SDK_INT < 19){
+        }else {
             webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
         webView.setWebViewClient(new Callback());
-        webView.loadUrl("https://infeeds.com/");
+        webView.loadUrl("file:///android_res/raw/index.html");
         webView.setWebChromeClient(new WebChromeClient(){
             //For Android 3.0+
             public void openFileChooser(ValueCallback<Uri> uploadMsg){
@@ -129,7 +137,7 @@ public class MainActivity extends AppCompatActivity{
             //For Android 5.0+
             public boolean onShowFileChooser(
                     WebView webView, ValueCallback<Uri[]> filePathCallback,
-                    WebChromeClient.FileChooserParams fileChooserParams){
+                    FileChooserParams fileChooserParams){
                 if(mUMA != null){
                     mUMA.onReceiveValue(null);
                 }
