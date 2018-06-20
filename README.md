@@ -20,7 +20,6 @@ Followings are permissions required for all the mentioned features to work.
 ```
 `INTERNET` permission is required to access online content and `WRITE_EXTERNAL_STORAGE`+`CAMERA` permissions to take photo from camera and save it to gallery.
 
-
 ## Want me to make a Custom App or Website for your business?
 ### Contact Me at - getmgks@gmail.com
 
@@ -39,12 +38,10 @@ Project Os (OpenSource) is an independent project started in year 2015. I always
 ## License
 This project is published under the MIT License - see [LICENSE.md](LICENSE.md) file for details or read [MIT license](https://opensource.org/licenses/MIT) for more details.
 
-
 ## Acknowledgment
 Post any issue(s) you are facing regarding the project. If you want to contribute to the project, you're most welcome to help me make a smarter project than it is.
 Also, you can help me at [Infeeds](https://github.com/infeeds) Open Source Projects, I always need a helping hand for that.
 Just drop me a mail at: [getmgks@gmail.com](mailto:getmgks@gmail.com)
-
 
 `PROJECT NOTE: *Android 4.4 doesn't support webview upload default method and it's a permanent bug as no more KitKat updates are going to be made. All other versions are working fine.*`
 
