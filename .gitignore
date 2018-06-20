@@ -34,5 +34,6 @@ captures/
 # Custom
 .idea/
 *.iml
+.gradle
 .DS_Store
 .externalNativeBuild
