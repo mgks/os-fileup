@@ -45,6 +45,9 @@ public class MainActivity extends AppCompatActivity{
     private ValueCallback<Uri[]> mUMA;
     private final static int FCR=1;
 
+    //select whether you want to upload multiple files
+    private boolean multiple_files = false;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent){
         super.onActivityResult(requestCode, resultCode, intent);
@@ -65,6 +68,16 @@ public class MainActivity extends AppCompatActivity{
                         String dataString = intent.getDataString();
                         if(dataString != null){
                             results = new Uri[]{Uri.parse(dataString)};
+                        } else {
+                            if(multiple_files) {
+                                if (intent.getClipData() != null) {
+                                    final int numSelectedFiles = intent.getClipData().getItemCount();
+                                    results = new Uri[numSelectedFiles];
+                                    for (int i = 0; i < numSelectedFiles; i++) {
+                                        results[i] = intent.getClipData().getItemAt(i).getUri();
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -161,6 +174,9 @@ public class MainActivity extends AppCompatActivity{
                 Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
                 contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
                 contentSelectionIntent.setType("*/*");
+                if(multiple_files) {
+                    contentSelectionIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                }
                 Intent[] intentArray;
                 if(takePictureIntent != null){
                     intentArray = new Intent[]{takePictureIntent};
@@ -172,6 +188,9 @@ public class MainActivity extends AppCompatActivity{
                 chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
                 chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser");
                 chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+                if(multiple_files && Build.VERSION.SDK_INT >= 18) {
+                    chooserIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                }
                 startActivityForResult(chooserIntent, FCR);
                 return true;
             }
