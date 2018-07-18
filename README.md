@@ -1,4 +1,7 @@
 # Project Os - File Upload
+
+<img src="Logotype primary.png" width="65%" height="65%" />
+
 Os-FileUp is an Android WebView Project to help app developers understand how to upload and process image for any hybrid app. This project explains the usage of gallery and camera intent.
 
 ## Getting Started
