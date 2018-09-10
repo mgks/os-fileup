@@ -1,6 +1,6 @@
 # Project Os - File Upload
 
-<img src="Logotype primary.png" width="65%" height="65%" />
+<img src="Logotype primary.png" width="200" height="" />
 
 Os-FileUp is an Android WebView Project to help app developers understand how to upload and process image for any hybrid app. This project explains the usage of gallery and camera intent.
 
@@ -31,9 +31,9 @@ This project is initially developed by **[Ghazi Khan](https://infeeds.com/u/mgks
 ### Would you like to buy me a cup of coffee?
 #### I'd appreciate even your little contribution to my work, it helps me keep this Open Source updated. If this project helped you or your business and you feel like donating some change, you can Paypal me - getmgks@gmail.com or tap any button below.
 
-<a href="https://ko-fi.com/Z8Z4BPQ6" target="_blank" title="Buy me a Coffee"><img height="36" style="border:0px;height:36px;" src="https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0" border="0" alt="Buy Me a Coffee at ko-fi.com" /></a>
+<a href="https://ko-fi.com/Z8Z4BPQ6" target="_blank" title="Buy me a Coffee"><img width="150" style="border:0px;width:150px;" src="https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0" border="0" alt="Buy Me a Coffee at ko-fi.com" /></a>
 
-<a href="https://www.patreon.com/bePatron?c=1575504" target="_blank" title="Become a Patron"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png"></a>
+<!--<a href="https://www.patreon.com/bePatron?c=1575504" target="_blank" title="Become a Patron"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" width="150" style="width:150px"></a>-->
 
 ## More About Project Os
 Project Os (OpenSource) is an independent project started in year 2015. I always wanted to share what I learned through my experiences, so please feel free to ask any question.
@@ -45,6 +45,9 @@ This project is published under the MIT License - see [LICENSE.md](LICENSE.md) f
 Post any issue(s) you are facing regarding the project. If you want to contribute to the project, you're most welcome to help me make a smarter project than it is.
 Also, you can help me at [Infeeds](https://github.com/infeeds) Open Source Projects, I always need a helping hand for that.
 Just drop me a mail at: [getmgks@gmail.com](mailto:getmgks@gmail.com)
+
+#### Some Credits
+Thanks [mansya](https://github.com/mansya) for the updated logo.
 
 `PROJECT NOTE: *Android 4.4 doesn't support webview upload default method and it's a permanent bug as no more KitKat updates are going to be made. All other versions are working fine.*`
 
