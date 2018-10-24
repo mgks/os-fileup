@@ -120,77 +120,73 @@ public class MainActivity extends AppCompatActivity{
         }
         webView.setWebViewClient(new Callback());
         webView.loadUrl("file:///android_res/raw/index.html");
-        webView.setWebChromeClient(new WebChromeClient(){
-            //For Android 3.0+
-            public void openFileChooser(ValueCallback<Uri> uploadMsg){
+        webView.setWebChromeClient(new WebChromeClient() {
+            //Handling input[type="file"] requests for android API 16+
+            public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
                 mUM = uploadMsg;
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.addCategory(Intent.CATEGORY_OPENABLE);
                 i.setType("*/*");
-                MainActivity.this.startActivityForResult(Intent.createChooser(i,"File Chooser"), FCR);
+                if (multiple_files && Build.VERSION.SDK_INT >= 18) {
+                    i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                }
+                startActivityForResult(Intent.createChooser(i, "File Chooser"), FCR);
             }
-            // For Android 3.0+, above method not supported in some android 3+ versions, in such case we use this
-            public void openFileChooser(ValueCallback uploadMsg, String acceptType){
-                mUM = uploadMsg;
-                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-                i.addCategory(Intent.CATEGORY_OPENABLE);
-                i.setType("*/*");
-                MainActivity.this.startActivityForResult(
-                        Intent.createChooser(i, "File Browser"),
-                        FCR);
-            }
-            //For Android 4.1+
-            public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture){
-                mUM = uploadMsg;
-                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-                i.addCategory(Intent.CATEGORY_OPENABLE);
-                i.setType("*/*");
-                MainActivity.this.startActivityForResult(Intent.createChooser(i, "File Chooser"), MainActivity.FCR);
-            }
-            //For Android 5.0+
-            public boolean onShowFileChooser(
-                    WebView webView, ValueCallback<Uri[]> filePathCallback,
-                    FileChooserParams fileChooserParams){
-                if(mUMA != null){
+
+            //Handling input[type="file"] requests for android API 21+
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+                String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+
+                //Checking for storage permission to write images for upload
+                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(MainActivity.this, perms, FCR);
+
+                    //Checking for WRITE_EXTERNAL_STORAGE permission
+                } else if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, FCR);
+
+                    //Checking for CAMERA permissions
+                } else if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, FCR);
+                }
+                if (mUMA != null) {
                     mUMA.onReceiveValue(null);
                 }
                 mUMA = filePathCallback;
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if(takePictureIntent.resolveActivity(MainActivity.this.getPackageManager()) != null){
+                Intent takePictureIntent = null;
+                takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(MainActivity.this.getPackageManager()) != null) {
                     File photoFile = null;
-                    try{
+                    try {
                         photoFile = createImageFile();
                         takePictureIntent.putExtra("PhotoPath", mCM);
-                    }catch(IOException ex){
+                    } catch (IOException ex) {
                         Log.e(TAG, "Image file creation failed", ex);
                     }
-                    if(photoFile != null){
+                    if (photoFile != null) {
                         mCM = "file:" + photoFile.getAbsolutePath();
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                    }else{
+                    } else {
                         takePictureIntent = null;
                     }
                 }
                 Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
                 contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
                 contentSelectionIntent.setType("*/*");
-                if(multiple_files) {
+                if (multiple_files) {
                     contentSelectionIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 }
                 Intent[] intentArray;
-                if(takePictureIntent != null){
+                if (takePictureIntent != null) {
                     intentArray = new Intent[]{takePictureIntent};
-                }else{
+                } else {
                     intentArray = new Intent[0];
                 }
 
                 Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
                 chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
-                chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser");
+                chooserIntent.putExtra(Intent.EXTRA_TITLE, "File Chooser");
                 chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
-                if(multiple_files && Build.VERSION.SDK_INT >= 18) {
-                    chooserIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                }
                 startActivityForResult(chooserIntent, FCR);
                 return true;
             }
