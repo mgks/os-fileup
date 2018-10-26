@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity{
     private ValueCallback<Uri[]> mUMA;
     private final static int FCR=1;
 
-    //select whether you want to upload multiple files
+    //select whether you want to upload multiple files (set 'true' for yes)
     private boolean multiple_files = false;
 
     @Override
@@ -53,14 +53,13 @@ public class MainActivity extends AppCompatActivity{
         super.onActivityResult(requestCode, resultCode, intent);
         if(Build.VERSION.SDK_INT >= 21){
             Uri[] results = null;
-            //Check if response is positive
+            //checking if response is positive
             if(resultCode== Activity.RESULT_OK){
                 if(requestCode == FCR){
                     if(null == mUMA){
                         return;
                     }
                     if(intent == null || intent.getData() == null){
-                        //Capture Photo if no image available
                         if(mCM != null){
                             results = new Uri[]{Uri.parse(mCM)};
                         }
@@ -119,9 +118,9 @@ public class MainActivity extends AppCompatActivity{
             webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
         webView.setWebViewClient(new Callback());
-        webView.loadUrl("file:///android_res/raw/index.html");
+        webView.loadUrl("file:///android_res/raw/index.html"); //add your test web/page address here
         webView.setWebChromeClient(new WebChromeClient() {
-            //Handling input[type="file"] requests for android API 16+
+            //handling input[type="file"] requests for android API 16+
             public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
                 mUM = uploadMsg;
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
@@ -133,19 +132,19 @@ public class MainActivity extends AppCompatActivity{
                 startActivityForResult(Intent.createChooser(i, "File Chooser"), FCR);
             }
 
-            //Handling input[type="file"] requests for android API 21+
+            //handling input[type="file"] requests for android API 21+
             public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
                 String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
 
-                //Checking for storage permission to write images for upload
+                //checking for storage permission to write images for upload
                 if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(MainActivity.this, perms, FCR);
 
-                    //Checking for WRITE_EXTERNAL_STORAGE permission
+                    //checking for WRITE_EXTERNAL_STORAGE permission
                 } else if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, FCR);
 
-                    //Checking for CAMERA permissions
+                    //checking for CAMERA permissions
                 } else if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, FCR);
                 }
@@ -192,18 +191,23 @@ public class MainActivity extends AppCompatActivity{
             }
         });
     }
+
+    //callback reporting if error occurs
     public class Callback extends WebViewClient{
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl){
             Toast.makeText(getApplicationContext(), "Failed loading app!", Toast.LENGTH_SHORT).show();
         }
     }
-    // Create an image file
+
+    //creating new image file here
     private File createImageFile() throws IOException{
         @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "img_"+timeStamp+"_";
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         return File.createTempFile(imageFileName,".jpg",storageDir);
     }
+
+    //back/down key handling
     @Override
     public boolean onKeyDown(int keyCode, @NonNull KeyEvent event){
         if(event.getAction() == KeyEvent.ACTION_DOWN){
