@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context="com.inf.os.fileup.MainActivity">
+    tools:context=".MainActivity">
     <WebView
         android:id="@+id/ifView"
         android:layout_width="match_parent"
