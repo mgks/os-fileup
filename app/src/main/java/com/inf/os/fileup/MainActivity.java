@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity{
     WebView webView;
     private static final String TAG = MainActivity.class.getSimpleName();
     private String mCM;
-    private ValueCallback mUM;
+    private ValueCallback<Uri> mUM;
     private ValueCallback<Uri[]> mUMA;
     private final static int FCR=1;
 
@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast"})
+    @SuppressWarnings({"findViewById", "RedundantCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -120,7 +121,12 @@ public class MainActivity extends AppCompatActivity{
         webView.setWebViewClient(new Callback());
         webView.loadUrl("file:///android_res/raw/index.html"); //add your test web/page address here
         webView.setWebChromeClient(new WebChromeClient() {
+            /*
+             * openFileChooser is not a public Android API and has never been part of the SDK.
+             */
             //handling input[type="file"] requests for android API 16+
+            @SuppressLint("ObsoleteSdkInt")
+            @SuppressWarnings("unused")
             public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
                 mUM = uploadMsg;
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
@@ -152,8 +158,7 @@ public class MainActivity extends AppCompatActivity{
                     mUMA.onReceiveValue(null);
                 }
                 mUMA = filePathCallback;
-                Intent takePictureIntent = null;
-                takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (takePictureIntent.resolveActivity(MainActivity.this.getPackageManager()) != null) {
                     File photoFile = null;
                     try {
