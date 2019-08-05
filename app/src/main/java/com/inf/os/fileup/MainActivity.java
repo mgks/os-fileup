@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity{
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private String cam_file_data;               // for storing camera file information
+    private String cam_file_data = null;        // for storing camera file information
     private ValueCallback<Uri> file_data;       // data/header received after file selection
     private ValueCallback<Uri[]> file_path;     // received file(s) temp. location
 
@@ -78,10 +78,8 @@ public class MainActivity extends AppCompatActivity{
                     if(null == file_path){
                         return;
                     }
-                    if(intent == null || intent.getClipData() == null){
-                        if(cam_file_data != null){
-                            results = new Uri[]{Uri.parse(cam_file_data)};
-                        }
+                    if(null == intent.getClipData() && null == intent.getDataString() && null != cam_file_data) {
+                        results = new Uri[]{Uri.parse(cam_file_data)};
                     }else{
                         if (null != intent.getClipData()) { // checking if multiple files selected or not
                             final int numSelectedFiles = intent.getClipData().getItemCount();
