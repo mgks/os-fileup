@@ -27,6 +27,11 @@ Followings are permissions required for all the mentioned features to work.
 ```
 `INTERNET` permission is required to access online content and `WRITE_EXTERNAL_STORAGE`+`CAMERA` permissions to take photo from camera and save it to gallery.
 
+### Know Bugs
+```
+22/09/19 - Camera not working till API 24 and API 29
+```
+
 ## About Project
 
 This project is initially developed by **[Ghazi Khan](https://infeeds.com/u/mgks)**.
