@@ -1,4 +1,4 @@
-package com.inf.os.fileup;
+package mgks.os.fileup;
 
 /*
  * Os-FileUp is an Open Source Android Project hosted on GitHub (https://github.com/mgks/Os-FileUp).
@@ -11,6 +11,7 @@ package com.inf.os.fileup;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -38,6 +39,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -78,17 +81,28 @@ public class MainActivity extends AppCompatActivity{
                     if(null == file_path){
                         return;
                     }
-                    if(null == intent.getClipData() && null == intent.getDataString() && null != cam_file_data) {
+
+                    ClipData clipData;
+                    String stringData;
+                    try {
+                        clipData = intent.getClipData();
+                        stringData = intent.getDataString();
+                    }catch (Exception e){
+                        clipData = null;
+                        stringData = null;
+                    }
+
+                    if (clipData == null && stringData == null && cam_file_data != null) {
                         results = new Uri[]{Uri.parse(cam_file_data)};
                     }else{
-                        if (null != intent.getClipData()) { // checking if multiple files selected or not
-                            final int numSelectedFiles = intent.getClipData().getItemCount();
+                        if (clipData != null) { // checking if multiple files selected or not
+                            final int numSelectedFiles = clipData.getItemCount();
                             results = new Uri[numSelectedFiles];
-                            for (int i = 0; i < intent.getClipData().getItemCount(); i++) {
-                                results[i] = intent.getClipData().getItemAt(i).getUri();
+                            for (int i = 0; i < clipData.getItemCount(); i++) {
+                                results[i] = clipData.getItemAt(i).getUri();
                             }
                         } else {
-                            results = new Uri[]{Uri.parse(intent.getDataString())};
+                            results = new Uri[]{Uri.parse(stringData)};
                         }
                     }
                 }
@@ -129,22 +143,24 @@ public class MainActivity extends AppCompatActivity{
         webView.loadUrl(webview_url);
         webView.setWebChromeClient(new WebChromeClient() {
 
-            /*-- openFileChooser is not a public Android API and has never been part of the SDK. --*/
-
-            /*-- handling input[type="file"] requests for android API 16+ --*/
-            public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
+            /*--
+            openFileChooser is not a public Android API and has never been part of the SDK.
+            handling input[type="file"] requests for android API 16+; I've removed support below API 21 as it was failing to work along with latest APIs.
+            --*/
+        /*    public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
                 file_data = uploadMsg;
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.addCategory(Intent.CATEGORY_OPENABLE);
                 i.setType(file_type);
-                if (multiple_files && Build.VERSION.SDK_INT >= 18) {
+                if (multiple_files) {
                     i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 }
                 startActivityForResult(Intent.createChooser(i, "File Chooser"), file_req_code);
             }
-
+        */
             /*-- handling input[type="file"] requests for android API 21+ --*/
             public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+
                 if(file_permission() && Build.VERSION.SDK_INT >= 21) {
                     file_path = filePathCallback;
                     Intent takePictureIntent = null;
@@ -192,6 +208,7 @@ public class MainActivity extends AppCompatActivity{
                                 cam_file_data = "file:" + photoFile.getAbsolutePath();
                                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
                             } else {
+                                cam_file_data = null;
                                 takePictureIntent = null;
                             }
                         }
@@ -210,6 +227,7 @@ public class MainActivity extends AppCompatActivity{
                                 cam_file_data = "file:" + videoFile.getAbsolutePath();
                                 takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(videoFile));
                             } else {
+                                cam_file_data = null;
                                 takeVideoIntent = null;
                             }
                         }
