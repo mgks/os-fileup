@@ -29,7 +29,7 @@ Followings are permissions required for all the mentioned features to work.
 
 ### Know Bugs
 ```
-22/09/19 - Camera not working till API 24 and API 29
+22/09/19 - Camera not working in API 29
 ```
 
 ## About Project
