@@ -285,7 +285,11 @@ public class MainActivity extends AppCompatActivity{
     private File create_image() throws IOException{
         @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "img_"+timeStamp+"_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File storageDir;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            storageDir = this.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        else
+            storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         return File.createTempFile(imageFileName,".jpg",storageDir);
     }
 
