@@ -4,7 +4,8 @@ package mgks.os.fileup;
  * Os-FileUp is an Open Source Android Project hosted on GitHub (https://github.com/mgks/Os-FileUp).
  * Developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
  * This program is free to use for private and commercial purposes.
- * Please mention project source or developer credit in your Application's License(s) Wiki.
+ * Please donate to the project if it helped you (https://ko-fi.com/getmgks).
+ * Don't forget to mention project source or developer credit in your Application's License(s) Wiki.
  * Giving right credit to developers encourages them to create better projects :)
  */
 
@@ -133,8 +134,6 @@ public class MainActivity extends AppCompatActivity{
 
         if(Build.VERSION.SDK_INT >= 21){
             webSettings.setMixedContentMode(0);
-            webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        }else if(Build.VERSION.SDK_INT >= 19){
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }else {
             webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
@@ -285,7 +284,7 @@ public class MainActivity extends AppCompatActivity{
     private File create_image() throws IOException{
         @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "img_"+timeStamp+"_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         return File.createTempFile(imageFileName,".jpg",storageDir);
     }
 
@@ -294,7 +293,7 @@ public class MainActivity extends AppCompatActivity{
         @SuppressLint("SimpleDateFormat")
         String file_name    = new SimpleDateFormat("yyyy_mm_ss").format(new Date());
         String new_name     = "file_"+file_name+"_";
-        File sd_directory   = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File sd_directory   = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         return File.createTempFile(new_name, ".3gp", sd_directory);
     }
 
