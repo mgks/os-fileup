@@ -16,6 +16,7 @@ import android.content.ClipData;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,19 +37,18 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity{
 
     /*-- CUSTOMIZE --*/
     /*-- you can customize these options for your convenience --*/
     private static String webview_url   = "file:///android_res/raw/index.html";    // web address or local file location you want to open in webview
-    private static String file_type     = "image/*";    // file types to be allowed for upload
+    private static String file_type     = "*/*";    // file types to be allowed for upload
     private boolean multiple_files      = true;         // allowing multiple file upload
 
     /*-- MAIN VARIABLES --*/
@@ -70,21 +70,18 @@ public class MainActivity extends AppCompatActivity{
 
             /*-- if file request cancelled; exited camera. we need to send null value to make future attempts workable --*/
             if (resultCode == Activity.RESULT_CANCELED) {
-                if (requestCode == file_req_code) {
                     file_path.onReceiveValue(null);
                     return;
-                }
             }
 
             /*-- continue if response is positive --*/
             if(resultCode== Activity.RESULT_OK){
-                if(requestCode == file_req_code){
                     if(null == file_path){
                         return;
                     }
-
                     ClipData clipData;
                     String stringData;
+
                     try {
                         clipData = intent.getClipData();
                         stringData = intent.getDataString();
@@ -92,7 +89,6 @@ public class MainActivity extends AppCompatActivity{
                         clipData = null;
                         stringData = null;
                     }
-
                     if (clipData == null && stringData == null && cam_file_data != null) {
                         results = new Uri[]{Uri.parse(cam_file_data)};
                     }else{
@@ -103,11 +99,24 @@ public class MainActivity extends AppCompatActivity{
                                 results[i] = clipData.getItemAt(i).getUri();
                             }
                         } else {
+                            try {
+                                Bitmap cam_photo = (Bitmap) intent.getExtras().get("data");
+                                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                                cam_photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                                stringData = MediaStore.Images.Media.insertImage(this.getContentResolver(), cam_photo, null, null);
+                            }catch (Exception ignored){}
+                            /* checking extra data
+                            Bundle bundle = intent.getExtras();
+                            if (bundle != null) {
+                                for (String key : bundle.keySet()) {
+                                    Log.w("ExtraData", key + " : " + (bundle.get(key) != null ? bundle.get(key) : "NULL"));
+                                }
+                            }*/
                             results = new Uri[]{Uri.parse(stringData)};
                         }
                     }
                 }
-            }
+
             file_path.onReceiveValue(results);
             file_path = null;
         }else{
