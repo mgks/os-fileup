@@ -11,6 +11,9 @@ android {
         versionName '8.0'
         multiDexEnabled true
     }
+    buildFeatures {
+        viewBinding true
+    }
     buildTypes {
         release {
             minifyEnabled false
