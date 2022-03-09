@@ -293,8 +293,15 @@ public class MainActivity extends AppCompatActivity{
     private File create_image() throws IOException{
         @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "img_"+timeStamp+"_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        return File.createTempFile(imageFileName,".jpg",storageDir);
+        //File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        //return File.createTempFile(imageFileName,".jpg",storageDir);
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"FolderName");
+
+            if (!storageDir.exists()) {
+                storageDir.mkdirs();
+            }
+            File image= new File(storageDir,imageFileName+".jpg");
+            return image;
     }
 
     /*-- creating new video file here --*/
