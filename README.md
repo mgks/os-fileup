@@ -34,11 +34,9 @@ Followings are permissions required for all the mentioned features to work.
 
 ## About Project
 
-This project is initially developed by **[Ghazi Khan](https://infeeds.com/u/mgks)**.
+This project is initially developed by **[Ghazi Khan](https://mgks.dev)**.
 
-#### I'd appreciate even your little contribution to my work, it helps me keep such open-source projects updated. If this project helped you or your business and you feel like donating some change, you can Paypal me - getmgks@gmail.com or buy me a coffee from the button below.
-
-<a href="https://ko-fi.com/Z8Z4BPQ6" target="_blank" title="Buy me a Coffee"><img width="150" style="border:0px;width:150px;" src="https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0" border="0" alt="Buy Me a Coffee at ko-fi.com" /></a>
+<a href="https://ko-fi.com/mgksdev" target="_blank" title="Buy me a Coffee"><img width="150" style="border:0px;width:150px;" src="https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0" border="0" alt="Buy Me a Coffee at ko-fi.com" /></a>
 
 ## License
 This project is published under the MIT License - check out [LICENSE.md](LICENSE.md) file or read [MIT license](https://opensource.org/licenses/MIT) for more details.
