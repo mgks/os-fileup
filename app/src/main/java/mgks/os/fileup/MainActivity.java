@@ -9,6 +9,8 @@ package mgks.os.fileup;
  * Giving right credit to developers encourages them to create better projects :)
  */
 
+import static java.security.AccessController.getContext;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -22,6 +24,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -62,72 +69,63 @@ public class MainActivity extends AppCompatActivity{
 
     private final static int file_req_code = 1;
 
-    @Override
+/*    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent){
         super.onActivityResult(requestCode, resultCode, intent);
-        if(Build.VERSION.SDK_INT >= 21){
-            Uri[] results = null;
+        Uri[] results = null;
 
-            /*-- if file request cancelled; exited camera. we need to send null value to make future attempts workable --*/
-            if (resultCode == Activity.RESULT_CANCELED) {
-                    file_path.onReceiveValue(null);
+        // if file request cancelled; exited camera. we need to send null value to make future attempts workable
+        if (resultCode == Activity.RESULT_CANCELED) {
+                file_path.onReceiveValue(null);
+                return;
+        }
+
+        // continue if response is positive
+        if(resultCode== Activity.RESULT_OK){
+                if(null == file_path){
                     return;
-            }
+                }
+                ClipData clipData;
+                String stringData;
 
-            /*-- continue if response is positive --*/
-            if(resultCode== Activity.RESULT_OK){
-                    if(null == file_path){
-                        return;
-                    }
-                    ClipData clipData;
-                    String stringData;
-
-                    try {
-                        clipData = intent.getClipData();
-                        stringData = intent.getDataString();
-                    }catch (Exception e){
-                        clipData = null;
-                        stringData = null;
-                    }
-                    if (clipData == null && stringData == null && cam_file_data != null) {
-                        results = new Uri[]{Uri.parse(cam_file_data)};
-                    }else{
-                        if (clipData != null) { // checking if multiple files selected or not
-                            final int numSelectedFiles = clipData.getItemCount();
-                            results = new Uri[numSelectedFiles];
-                            for (int i = 0; i < clipData.getItemCount(); i++) {
-                                results[i] = clipData.getItemAt(i).getUri();
-                            }
-                        } else {
-                            try {
-                                Bitmap cam_photo = (Bitmap) intent.getExtras().get("data");
-                                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                                cam_photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-                                stringData = MediaStore.Images.Media.insertImage(this.getContentResolver(), cam_photo, null, null);
-                            }catch (Exception ignored){}
-                            /* checking extra data
-                            Bundle bundle = intent.getExtras();
-                            if (bundle != null) {
-                                for (String key : bundle.keySet()) {
-                                    Log.w("ExtraData", key + " : " + (bundle.get(key) != null ? bundle.get(key) : "NULL"));
-                                }
-                            }*/
-                            results = new Uri[]{Uri.parse(stringData)};
+                try {
+                    clipData = intent.getClipData();
+                    stringData = intent.getDataString();
+                }catch (Exception e){
+                    clipData = null;
+                    stringData = null;
+                }
+                if (clipData == null && stringData == null && cam_file_data != null) {
+                    results = new Uri[]{Uri.parse(cam_file_data)};
+                }else{
+                    if (clipData != null) { // checking if multiple files selected or not
+                        final int numSelectedFiles = clipData.getItemCount();
+                        results = new Uri[numSelectedFiles];
+                        for (int i = 0; i < clipData.getItemCount(); i++) {
+                            results[i] = clipData.getItemAt(i).getUri();
                         }
+                    } else {
+                        try {
+                            Bitmap cam_photo = (Bitmap) intent.getExtras().get("data");
+                            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                            cam_photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                            stringData = MediaStore.Images.Media.insertImage(this.getContentResolver(), cam_photo, null, null);
+                        }catch (Exception ignored){}
+                        // checking extra data
+                        //Bundle bundle = intent.getExtras();
+                        //if (bundle != null) {
+                        //    for (String key : bundle.keySet()) {
+                        //        Log.w("ExtraData", key + " : " + (bundle.get(key) != null ? bundle.get(key) : "NULL"));
+                        //   }
+                        //}
+                        results = new Uri[]{Uri.parse(stringData)};
                     }
                 }
-
-            file_path.onReceiveValue(results);
-            file_path = null;
-        }else{
-            if(requestCode == file_req_code){
-                if(null == file_data) return;
-                Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
-                file_data.onReceiveValue(result);
-                file_data = null;
             }
-        }
-    }
+
+        file_path.onReceiveValue(results);
+        file_path = null;
+    }*/
 
     @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast"})
     @Override
@@ -135,18 +133,82 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ActivityResultLauncher<Intent> choserAct = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    Log.w("OSFU","LL1");
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        Intent data = result.getData();
+                        //new activity
+                        Uri[] results = null;
+                        Log.w("OSFU","LL2");
+
+                        if(data != null) {
+                            Log.w("OSFU","LL3");
+                            if (null == file_path) {
+                                return;
+                            }
+                            ClipData clipData;
+                            String stringData;
+
+                            try {
+                                clipData = data.getClipData();
+                                stringData = data.getDataString();
+                            } catch (Exception e) {
+                                clipData = null;
+                                stringData = null;
+                            }
+                            if (clipData == null && stringData == null && cam_file_data != null) {
+                                results = new Uri[]{Uri.parse(cam_file_data)};
+                            } else {
+                                if (clipData != null) { // checking if multiple files selected or not
+                                    final int numSelectedFiles = clipData.getItemCount();
+                                    results = new Uri[numSelectedFiles];
+                                    for (int i = 0; i < clipData.getItemCount(); i++) {
+                                        results[i] = clipData.getItemAt(i).getUri();
+                                    }
+                                } else {
+                                    try {
+                                        Bitmap cam_photo = (Bitmap) data.getExtras().get("data");
+                                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                                        cam_photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                                        stringData = MediaStore.Images.Media.insertImage(getApplicationContext().getContentResolver(), cam_photo, null, null);
+                                    } catch (Exception ignored) {
+                                    }
+                                        /* checking extra data
+                                        Bundle bundle = data.getExtras();
+                                        if (bundle != null) {
+                                            for (String key : bundle.keySet()) {
+                                                Log.w("ExtraData", key + " : " + (bundle.get(key) != null ? bundle.get(key) : "NULL"));
+                                            }
+                                        }*/
+                                    results = new Uri[]{Uri.parse(stringData)};
+                                    Log.w("OSFU","L4");
+                                }
+                            }
+                        }
+
+                        file_path.onReceiveValue(results);
+                        file_path = null;
+
+                    }else{
+                        file_path.onReceiveValue(null);
+                    }
+                }
+
+            });
+
         webView = (WebView) findViewById(R.id.os_view);
         assert webView != null;
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAllowFileAccess(true);
 
-        if(Build.VERSION.SDK_INT >= 21){
-            webSettings.setMixedContentMode(0);
-            webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        }else {
-            webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        }
+        webSettings.setMixedContentMode(0);
+        webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         webView.setWebViewClient(new Callback());
         webView.loadUrl(webview_url);
         webView.setWebChromeClient(new WebChromeClient() {
@@ -168,106 +230,108 @@ public class MainActivity extends AppCompatActivity{
         */
             /*-- handling input[type="file"] requests for android API 21+ --*/
             public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+            if(file_permission()) {
+                file_path = filePathCallback;
+                Intent takePictureIntent = null;
+                Intent takeVideoIntent = null;
 
-                if(file_permission() && Build.VERSION.SDK_INT >= 21) {
-                    file_path = filePathCallback;
-                    Intent takePictureIntent = null;
-                    Intent takeVideoIntent = null;
+                boolean includeVideo = false;
+                boolean includePhoto = false;
 
-                    boolean includeVideo = false;
-                    boolean includePhoto = false;
-
-                    /*-- checking the accept parameter to determine which intent(s) to include --*/
-                    paramCheck:
-                    for (String acceptTypes : fileChooserParams.getAcceptTypes()) {
-                        String[] splitTypes = acceptTypes.split(", ?+"); // although it's an array, it still seems to be the whole value; split it out into chunks so that we can detect multiple values
-                        for (String acceptType : splitTypes) {
-                            switch (acceptType) {
-                                case "*/*":
-                                    includePhoto = true;
-                                    includeVideo = true;
-                                    break paramCheck;
-                                case "image/*":
-                                    includePhoto = true;
-                                    break;
-                                case "video/*":
-                                    includeVideo = true;
-                                    break;
-                            }
+                /*-- checking the accept parameter to determine which intent(s) to include --*/
+                paramCheck:
+                for (String acceptTypes : fileChooserParams.getAcceptTypes()) {
+                    String[] splitTypes = acceptTypes.split(", ?+"); // although it's an array, it still seems to be the whole value; split it out into chunks so that we can detect multiple values
+                    for (String acceptType : splitTypes) {
+                        switch (acceptType) {
+                            case "*/*":
+                                includePhoto = true;
+                                includeVideo = true;
+                                break paramCheck;
+                            case "image/*":
+                                includePhoto = true;
+                                break;
+                            case "video/*":
+                                includeVideo = true;
+                                break;
                         }
                     }
-
-                    if (fileChooserParams.getAcceptTypes().length == 0) {   //no `accept` parameter was specified, allow both photo and video
-                        includePhoto = true;
-                        includeVideo = true;
-                    }
-
-                    if (includePhoto) {
-                        takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        if (takePictureIntent.resolveActivity(MainActivity.this.getPackageManager()) != null) {
-                            File photoFile = null;
-                            try {
-                                photoFile = create_image();
-                                takePictureIntent.putExtra("PhotoPath", cam_file_data);
-                            } catch (IOException ex) {
-                                Log.e(TAG, "Image file creation failed", ex);
-                            }
-                            if (photoFile != null) {
-                                cam_file_data = "file:" + photoFile.getAbsolutePath();
-                                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                            } else {
-                                cam_file_data = null;
-                                takePictureIntent = null;
-                            }
-                        }
-                    }
-
-                    if (includeVideo) {
-                        takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                        if (takeVideoIntent.resolveActivity(MainActivity.this.getPackageManager()) != null) {
-                            File videoFile = null;
-                            try {
-                                videoFile = create_video();
-                            } catch (IOException ex) {
-                                Log.e(TAG, "Video file creation failed", ex);
-                            }
-                            if (videoFile != null) {
-                                cam_file_data = "file:" + videoFile.getAbsolutePath();
-                                takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(videoFile));
-                            } else {
-                                cam_file_data = null;
-                                takeVideoIntent = null;
-                            }
-                        }
-                    }
-
-                    Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                    contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                    contentSelectionIntent.setType(file_type);
-                    if (multiple_files) {
-                        contentSelectionIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                    }
-
-                    Intent[] intentArray;
-                    if (takePictureIntent != null && takeVideoIntent != null) {
-                        intentArray = new Intent[]{takePictureIntent, takeVideoIntent};
-                    } else if (takePictureIntent != null) {
-                        intentArray = new Intent[]{takePictureIntent};
-                    } else if (takeVideoIntent != null) {
-                        intentArray = new Intent[]{takeVideoIntent};
-                    } else {
-                        intentArray = new Intent[0];
-                    }
-
-                    Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
-                    chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
-                    chooserIntent.putExtra(Intent.EXTRA_TITLE, "File chooser");
-                    chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
-                    startActivityForResult(chooserIntent, file_req_code);
-                    return true;
-                } else {
-                    return false;
                 }
+
+                if (fileChooserParams.getAcceptTypes().length == 0) {   //no `accept` parameter was specified, allow both photo and video
+                    includePhoto = true;
+                    includeVideo = true;
+                }
+
+                if (includePhoto) {
+                    takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (takePictureIntent.resolveActivity(MainActivity.this.getPackageManager()) != null) {
+                        File photoFile = null;
+                        try {
+                            photoFile = create_image();
+                            takePictureIntent.putExtra("PhotoPath", cam_file_data);
+                        } catch (IOException ex) {
+                            Log.e(TAG, "Image file creation failed", ex);
+                        }
+                        if (photoFile != null) {
+                            cam_file_data = "file:" + photoFile.getAbsolutePath();
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                        } else {
+                            cam_file_data = null;
+                            takePictureIntent = null;
+                        }
+                    }
+                }
+
+                if (includeVideo) {
+                    takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                    if (takeVideoIntent.resolveActivity(MainActivity.this.getPackageManager()) != null) {
+                        File videoFile = null;
+                        try {
+                            videoFile = create_video();
+                        } catch (IOException ex) {
+                            Log.e(TAG, "Video file creation failed", ex);
+                        }
+                        if (videoFile != null) {
+                            cam_file_data = "file:" + videoFile.getAbsolutePath();
+                            takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(videoFile));
+                        } else {
+                            cam_file_data = null;
+                            takeVideoIntent = null;
+                        }
+                    }
+                }
+
+                Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                contentSelectionIntent.setType(file_type);
+                if (multiple_files) {
+                    contentSelectionIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                }
+
+                Intent[] intentArray;
+                if (takePictureIntent != null && takeVideoIntent != null) {
+                    intentArray = new Intent[]{takePictureIntent, takeVideoIntent};
+                } else if (takePictureIntent != null) {
+                    intentArray = new Intent[]{takePictureIntent};
+                } else if (takeVideoIntent != null) {
+                    intentArray = new Intent[]{takeVideoIntent};
+                } else {
+                    intentArray = new Intent[0];
+                }
+
+                Log.w("OSFU","L1");
+                Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
+                choserAct.launch(chooserIntent);
+
+                /*chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
+                chooserIntent.putExtra(Intent.EXTRA_TITLE, "File chooser");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+                startActivityForResult(chooserIntent, file_req_code);*/
+                return true;
+            } else {
+                return false;
+            }
             }
         });
     }
@@ -281,10 +345,21 @@ public class MainActivity extends AppCompatActivity{
 
     /*-- checking and asking for required file permissions --*/
     public boolean file_permission(){
-        if(Build.VERSION.SDK_INT >=23 && (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1);
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            Log.w("OSFU","P1");
+        }
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            Log.w("OSFU","P2");
+        }
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            Log.w("OSFU","P3");
+        }
+        if(Build.VERSION.SDK_INT >=23 && (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1);
+            Log.w("OSFU","LL2");
             return false;
         }else{
+            Log.w("OSFU","LL3");
             return true;
         }
     }
