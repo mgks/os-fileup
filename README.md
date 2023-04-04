@@ -1,11 +1,11 @@
-## Project FileUp is Now Archived
+# Project FileUp is Now Archived
 As of April 2023, Project FileUp is discontinued and preserved as an archive here.
 
 You can still download the resource files and test them but there is not much hope that Android source codes have not changed and are buggier, and more painful to understand already. Yet, I'm still working on other projects similar to this, checkout Smart WebView for further refence.
 
 **Similar Project - [Smart WebView for Android](https://github.com/mgks/Android-SmartWebView)**
 
-# Project FileUp for Android
+## Project FileUp for Android
 
 <img src="Logotype primary.png" width="200" height="" />
 
